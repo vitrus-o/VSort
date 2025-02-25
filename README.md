@@ -18,6 +18,7 @@ VSort is a console-based application designed to help users visualize and practi
 - .NET 8.0 SDK or later
 
 ### Installation
+You can immediately run this application by downloading the latest [release](https://github.com/vitrus-o/VSort/releases), extract it, and run the VSort.exe. Or you can build it by following these steps:
 
 1. Clone the repository:
 ```
@@ -36,5 +37,4 @@ dotnet build
 ```
 dotnet run
 ```
-
 2. Follow the on-screen instructions to navigate throught the menu
