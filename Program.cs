@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using VSort;
 
 namespace vsort
@@ -19,9 +20,10 @@ namespace vsort
             {
                 Console.SetCursorPosition(0, 1);
                 Console.WriteLine("\n");
-                Console.WriteLine($"{(option == 1 ? highlight : "   ")}Visualize Sorting\u001b[0m");                
-                Console.WriteLine($"{(option == 2 ? highlight : "   ")}Preferences\u001b[0m");
-                Console.WriteLine($"{(option == 3 ? highlight : "   ")}Exit\u001b[0m");
+                Console.WriteLine($"{(option == 1 ? highlight : "   ")}Visualize Sorting\u001b[0m");
+                Console.WriteLine($"{(option == 2 ? highlight : "   ")}Practice Sorting\u001b[0m");                
+                Console.WriteLine($"{(option == 3 ? highlight : "   ")}Preferences\u001b[0m");
+                Console.WriteLine($"{(option == 4 ? highlight : "   ")}Exit\u001b[0m");
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
@@ -30,9 +32,10 @@ namespace vsort
                     case ConsoleKey.Enter:
                         switch (option)
                         {
-                            case 1: Console.Clear(); VisualizeSorting(); Console.Clear(); break;
-                            case 2: Console.Clear(); p.viewPreferences(); Console.Clear(); break;
-                            case 3: Console.Clear(); exit = true; Console.WriteLine("Made by: Vee Emmanuel L. Añora"); return;
+                            case 1: Console.Clear(); select("Visualiz"); Console.Clear(); break;
+                            case 2: Console.Clear(); select("Practic"); Console.Clear(); break;
+                            case 3: Console.Clear(); p.viewPreferences(); Console.Clear(); break;
+                            case 4: Console.Clear(); exit = true; Console.WriteLine("Made by: Vee Emmanuel L. Añora"); return;
                         }
                         if (!exit)
                         {
@@ -43,19 +46,14 @@ namespace vsort
                 }
             } while (!exit);
         }
-        static void PracticeSorting()
-        {
-            Console.WriteLine("practice");
-            Console.ReadKey();
-        }
-        static void VisualizeSorting()
+        static void select(string action)
         {
             SortList sl;
             SortingType st = SortingType.Selection_Sort;
             ConsoleKeyInfo key;
             int option = 1;
             bool exit = false;
-            Console.WriteLine("Select Sorting Algorithm to Visualize\n");
+            Console.WriteLine($"Select Sorting Algorithm to {action}e\n");
             do
             {
                 Console.SetCursorPosition(0, 1);
@@ -82,24 +80,87 @@ namespace vsort
                         }
                         if (!exit)
                         {
-                            sl = promptVisualize(st);
-                            printSortList(sl);
-                            Console.Write("\nList has been sorted\n--Press any key to continue--");
+                            sl = prompt(action,st);
+                            if (action == "Practic")
+                                practiceSortList(sl);
+                            else
+                                printSortList(sl);
+                            Console.WriteLine("--Press any key to continue--");
                             Console.ReadKey();
                             Console.Clear();
-                            Console.WriteLine("Select Sorting Algorithm to Visualize\n");
+                            Console.WriteLine($"Select Sorting Algorithm to {action}e\n");
                         }
                         break;
                 }
             } while (!exit);
         }
-        static SortList promptVisualize(SortingType sortingType)
+        static void practiceSortList(SortList sortList)
+        {
+            int score = 0;
+            Console.WriteLine("\n\nEnter the expected list for each round of sorting: ");
+            Console.CursorVisible = true;
+            for (int i = 0; i < sortList.Rounds.Count; i++)
+            {
+                string[] inputs = Console.ReadLine().Split(' ');
+                List<int> expectedRound = inputs.Select(int.Parse).ToList();
+                if (p.ImmediateFeedback)
+                {
+                    if (expectedRound.SequenceEqual(sortList.Rounds[i]))
+                    {
+                        Console.Write(string.Join(" ", sortList.Rounds[i]));
+                        Console.WriteLine(" - Correct!");
+                        score++;
+                    }
+                    else
+                        Console.WriteLine("Incorrect!");
+                }
+                if (expectedRound.SequenceEqual(sortList.Rounds[i]))
+                    score++;
+            }
+            Console.WriteLine($"\n\nPractice ended.\nTotal Score: {score}/{sortList.Rounds.Count} ({(double)score / sortList.Rounds.Count * 100.0:F0}%)\n\n");
+            Console.CursorVisible = false;
+        }
+        static SortList prompt(string action,SortingType sortingType)
         {
             Console.CursorVisible = true;
             int size = 0;
+            bool nature = false,selected = false;
             do
             {
-                Console.Write($"--Visualizing {sortingType}--\nNature of Sort: {(p.UseRandomInput ? "Random" : "Custom")}\nNumber of Input: ");
+                Console.Write($"--{action}ing {sortingType}--\nNature of Sort (Random - \"R\"/ Manual - \"M\"): ");
+                try
+                {
+                    string input = Console.ReadLine().ToUpper();
+                    if (input == "R" || input == "M")
+                    {
+                        nature = input == "R";
+                    }
+                    else
+                        throw new FormatException();
+                    selected = true;
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("\n\nInput is not a valid boolean value. Please input once more!");
+                }
+                catch (ArgumentNullException)
+                {
+                    Console.WriteLine("\n\nInput should not be null. Please input once more!");
+                }
+                finally
+                {
+                    if (selected == false)
+                    { //checkpoint for exceptions if not exception pass through else finally block works
+                        Console.WriteLine("--Press any key to continue--");
+                        Console.ReadKey();
+                    }
+                }
+                Console.Clear();
+            } while (!selected);
+            selected = false;
+            do
+            {
+                Console.Write($"--{action}ing {sortingType}--\nNature of Sort: {(nature ? "Random" : "Custom")}\nNumber of Input: ");
                 try
                 {
                     size = int.Parse(Console.ReadLine());
@@ -112,31 +173,35 @@ namespace vsort
                     else
                     {
                         Console.Clear();
-                        break;
+                        selected = true;
                     }
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("\n\nInput is not a valid integer. Please input once more!");
-                    Console.WriteLine("--Press any key to continue--");
-                    Console.ReadKey();
                 }
                 catch (ArgumentNullException)
                 {
                     Console.WriteLine("\n\nInput should not be null. Please input once more!");
-                    Console.WriteLine("--Press any key to continue--");
-                    Console.ReadKey();
+                }
+                finally
+                {
+                    if (selected == false)
+                    {
+                        Console.WriteLine("--Press any key to continue--");
+                        Console.ReadKey();
+                    }
                 }
                 Console.Clear();
-            } while (size <= 1);
+            } while (!selected);
+            selected = false;
             List<int> data = new List<int>(size);
-            if (p.UseRandomInput)
+            if (nature)
             {
                 data = GenerateRandom(size);
             }
             else
             {
-                bool validInput1 = false;
                 do
                 {
                     Console.Write("Input data separated by spaces: ");
@@ -147,31 +212,35 @@ namespace vsort
                             throw new FormatException("Number of inputs does not match the indicated size.");
                         foreach (string input in inputs)
                             data.Add(int.Parse(input));
-                        validInput1 = true;
+                        selected = true;
                     }
                     catch (FormatException e)
                     {
                         Console.WriteLine($"Input is not valid. {e.Message} Please input once more!");
-                        Console.WriteLine("\n\n--Press any key to continue--");
-                        Console.ReadKey();
-                        data.Clear();
                     }
                     catch (ArgumentNullException)
                     {
                         Console.WriteLine("Input should not be null. Please input once more!");
-                        Console.WriteLine("\n\n--Press any key to continue--");
-                        Console.ReadKey();
-                        data.Clear();
+                    }
+                    finally
+                    {
+                        if (selected == false)
+                        {
+                            Console.WriteLine("\n\n--Press any key to continue--");
+                            Console.ReadKey();
+                            data.Clear();
+                        }
                     }
                     Console.Clear();
-                } while (!validInput1);
+                } while (!selected);
             }
-            bool ascending = false, validInput = false;
+            bool ascending = false;
+            selected = false;
             do
             {
-                Console.Write($"--Visualizing {sortingType}--\nNature of Sort: {(p.UseRandomInput ? "Random" : "Custom")}\nNumber of Input: {size}\nInitial List: ");
+                Console.Write($"--{action}ing {sortingType}--\nNature of Sort: {(nature ? "Random" : "Custom")}\nNumber of Input: {size}\nInitial List: ");
                 foreach(var num in data)
-                    Console.Write(num + " ");
+                    Console.Write($"{num}, ");
                 Console.Write("\nSorting Order (A/D): ");
                 try
                 {
@@ -182,33 +251,35 @@ namespace vsort
                     }
                     else
                         throw new FormatException();
-                    validInput = true;
+                    selected = true;
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("Input is not valid. Please input once more!");
-                    Console.WriteLine("\n\n--Press any key to continue--");
-                    Console.ReadKey();
                 }
                 catch (ArgumentNullException)
                 {
                     Console.WriteLine("Input should not be null. Please input once more!");
-                    Console.WriteLine("\n\n--Press any key to continue--");
-                    Console.ReadKey();
+                }
+                finally
+                {
+                    if (selected == false)
+                    {
+                        Console.WriteLine("\n\n--Press any key to continue--");
+                        Console.ReadKey();
+                    }
                 }
                 Console.Clear();
-            } while (!validInput);
-            Console.Write($"--Visualizing {sortingType}--\nNature of Sort: {(p.UseRandomInput ? "Random" : "Custom")}\nNumber of Input: {size}\nInitial List: ");
-            foreach (var num in data)
-                Console.Write(num + " ");
+            } while (!selected);
+            Console.Write($"--{action}ing {sortingType}--\nNature of Sort: {(nature ? "Random" : "Custom")}\nNumber of Input: {size}\nInitial List: ");
+            foreach(var num in data)
+                Console.Write($"{num}, ");
             Console.Write($"\nSorting Order: {(ascending ? "Ascending" : "Descending")}");
             Console.CursorVisible = false;
             return new SortList(data, sortingType, ascending);
         }
         static void printSortList(SortList sortList)
         {
-            if (p.ShowNumOfRecordHints)
-                Console.WriteLine($"\nNumber of Actual Records: {sortList.Rounds.Count}");
             Console.WriteLine("\n");
             List<int> prev = null;
             foreach (var round in sortList.Rounds)
@@ -221,17 +292,15 @@ namespace vsort
                     Console.ReadKey();
             }
             Console.WriteLine();
+            Console.WriteLine("\nList has been sorted");
         }
-        static List<int> GenerateRandom(int size)
+        static List<int> GenerateRandom(int size, int minValue = 1, int maxValue = 100)
         {
-            List<int> numbers = Enumerable.Range(0, size).ToList();
+            List<int> numbers = new List<int>();
             Random rand = new Random();
-            for (int i = numbers.Count - 1; i > 0; i--)
+            for (int i = 0; i < size; i++)
             {
-                int j = rand.Next(0, i+1);
-                int temp = numbers[j];
-                numbers[j] = numbers[i];
-                numbers[i] = temp;
+                numbers.Add(rand.Next(minValue,maxValue + 1));
             }
             return numbers;
         }
