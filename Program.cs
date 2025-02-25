@@ -27,8 +27,8 @@ namespace vsort
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
-                    case ConsoleKey.DownArrow: option = (option == 3 ? 1 : option + 1); break;
-                    case ConsoleKey.UpArrow: option = (option == 1 ? 3 : option - 1); break;
+                    case ConsoleKey.DownArrow: option = (option == 4 ? 1 : option + 1); break;
+                    case ConsoleKey.UpArrow: option = (option == 1 ? 4 : option - 1); break;
                     case ConsoleKey.Enter:
                         switch (option)
                         {
