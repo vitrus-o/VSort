@@ -1,6 +1,0 @@
-﻿Initial commit
-
-- Add main program logic in `Program.cs` for visualizing sorting algorithms.
-- Implement sorting algorithms in `SortList.cs` (Selection Sort, Bubble Sort, Insertion Sort, Merge Sort, Quick Sort).
-- Add preferences management in `Preferences.cs` with options for random input, removing non-swapping rounds, and more.
-- Include `SortingType.cs` for defining sorting algorithm types.
