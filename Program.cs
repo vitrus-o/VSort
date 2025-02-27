@@ -101,13 +101,31 @@ namespace vsort
             Console.CursorVisible = true;
             for (int i = 0; i < sortList.Rounds.Count; i++)
             {
-                string[] inputs = Console.ReadLine().Split(' ');
-                List<int> expectedRound = inputs.Select(int.Parse).ToList();
+                bool valid = false;
+                string[] inputs = null;
+                List<int> expectedRound = null;
+                do
+                {
+                    try
+                    {
+                        inputs = Console.ReadLine().Split(' ');
+                        expectedRound = inputs.Select(int.Parse).ToList();
+                        valid = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("\nInput is not a valid list of strings. Please input once more!");
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("\nInput should not be null. Please input once more!");
+                    }
+                } while (!valid);
                 if (p.ImmediateFeedback)
                 {
                     if (expectedRound.SequenceEqual(sortList.Rounds[i]))
                     {
-                        Console.WriteLine(" - Correct!");
+                        Console.WriteLine("Correct!");
                         score++;
                     }
                     else
