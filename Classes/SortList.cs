@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace VSort
+namespace VSort.Classes
 {
     public class SortList
     {
@@ -16,36 +16,36 @@ namespace VSort
             this.data = data;
             this.ascending = ascending;
             this.sortingType = sortingType;
-            this.rounds = new List<List<int>>();
-            this.GenerateRounds();
+            rounds = new List<List<int>>();
+            GenerateRounds();
         }
         public SortList(List<int> data, SortingType sortingType)
         {
             this.data = data;
-            this.ascending = true;
+            ascending = true;
             this.sortingType = sortingType;
-            this.rounds = new List<List<int>>();
-            this.GenerateRounds();
+            rounds = new List<List<int>>();
+            GenerateRounds();
         }
         public List<List<int>> Rounds
         {
-            get => new List<List<int>>(this.rounds);
+            get => new List<List<int>>(rounds);
         }
         public void GenerateRounds()
         {
-            int[] array = this.data.ToArray();
-            switch (this.sortingType)
+            int[] array = data.ToArray();
+            switch (sortingType)
             {
                 case SortingType.Selection_Sort: SelectionSort(array); break;
                 case SortingType.Bubble_Sort: BubbleSort(array); break;
                 case SortingType.Insertion_Sort: InsertionSort(array); break;
-                case SortingType.Merge_Sort: MergeSort(array,0,array.Length-1); break;
+                case SortingType.Merge_Sort: MergeSort(array, 0, array.Length - 1); break;
                 case SortingType.Quick_Sort: QuickSort(array); break;
             }
         }
         private void CaptureRound(int[] array)
         {
-            this.rounds.Add(array.ToList());
+            rounds.Add(array.ToList());
         }
         private void Swap(int[] array, int i, int idxSmall)
         {
@@ -62,10 +62,10 @@ namespace VSort
                 idxSmall = i;
                 for (int j = i + 1; j < array.Length; j++)
                 {
-                    if (this.ascending ? array[j] < array[idxSmall] : array[j] > array[idxSmall])
+                    if (ascending ? array[j] < array[idxSmall] : array[j] > array[idxSmall])
                         idxSmall = j;
                 }
-                Swap(array,i,idxSmall);
+                Swap(array, i, idxSmall);
                 CaptureRound(array);
             }
         }
@@ -78,7 +78,7 @@ namespace VSort
                 swp = false;
                 for (int j = array.Length - 1; j > i; j--)
                 {
-                    if (ascending ? array[j] < array[j - 1] : array[j] > array[j-1])
+                    if (ascending ? array[j] < array[j - 1] : array[j] > array[j - 1])
                     {
                         Swap(array, j, j - 1);
                         swp = true;
@@ -97,19 +97,19 @@ namespace VSort
                 j = i - 1;
                 while (j >= 0 && (ascending ? key < array[j] : key > array[j]))
                 {
-                    array[j+1]=array[j];
+                    array[j + 1] = array[j];
                     j--;
                 }
-                array[j+1] = key;
+                array[j + 1] = key;
                 CaptureRound(array);
             }
         }
-        private void MergeSort(int[] array,int left,int right)
+        private void MergeSort(int[] array, int left, int right)
         {
             if (left < right)
             {
-                int mid =  (left + right)/ 2;
-                MergeSort(array,left,mid);
+                int mid = (left + right) / 2;
+                MergeSort(array, left, mid);
                 MergeSort(array, mid + 1, right);
                 Merge(array, left, mid, right);
                 CaptureRound(array);
@@ -119,17 +119,17 @@ namespace VSort
         {
             int n1 = mid - left + 1;
             int n2 = right - mid;
-            int[]lArray = new int[n1];
-            int[]rArray = new int[n2];
+            int[] lArray = new int[n1];
+            int[] rArray = new int[n2];
             Array.Copy(array, left, lArray, 0, n1);
-            Array.Copy(array,mid+1, rArray, 0, n2);
+            Array.Copy(array, mid + 1, rArray, 0, n2);
             int i = 0, j = 0, k = left;
             while (i < n1 && j < n2)
             {
                 if (ascending ? lArray[i] <= rArray[j] : lArray[i] >= rArray[j])
                     array[k++] = lArray[i++];
                 else
-                    array[k++] = rArray[j++];;
+                    array[k++] = rArray[j++]; ;
             }
             while (i < n1)
                 array[k++] = lArray[i++];
@@ -146,7 +146,7 @@ namespace VSort
             if (start < end)
             {
                 pivot = array[start];
-                i= start+1;
+                i = start + 1;
                 j = end;
                 while (true)
                 {
@@ -157,7 +157,7 @@ namespace VSort
                         while (j >= start && array[j] > pivot)
                             j--;
                     }
-                    else 
+                    else
                     {
                         while (i <= end && array[i] > pivot)
                             i++;
@@ -172,8 +172,8 @@ namespace VSort
                 }
                 Swap(array, start, j);
                 CaptureRound(array);
-                QuickSort(array, start, j-1);
-                QuickSort(array,j+1,end);
+                QuickSort(array, start, j - 1);
+                QuickSort(array, j + 1, end);
             }
         }
     }

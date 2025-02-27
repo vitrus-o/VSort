@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Text;
-using VSort;
+using VSort.Classes;
 
 namespace vsort
 {

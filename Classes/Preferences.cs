@@ -4,24 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 
-namespace VSort
+namespace VSort.Classes
 {
     public class Preferences
     {
         public bool ImmediateFeedback { get; set; }
-        public bool RemoveNonSwappingRounds {  get; set; }
+        public bool RemoveNonSwappingRounds { get; set; }
         public bool OneByOne { get; set; }
         private static readonly string PreferencesFilePath = "preferences.json";
 
         public Preferences()
         {
-            this.ImmediateFeedback = true;
-            this.RemoveNonSwappingRounds = true;
-            this.OneByOne = true;
+            ImmediateFeedback = true;
+            RemoveNonSwappingRounds = true;
+            OneByOne = true;
         }
         public void viewPreferences()
         {
-            Console.WriteLine($"--Preferences--\n\nImmediate Feedback: {(this.ImmediateFeedback ? "\u001b[32mTrue\u001b[0m" : "\u001b[31mFalse\u001b[0m")} - Shows if you were correct or not immediately, otherwise it will be shown at the end.\nRemove Non-Swapping Records (Visualization Only): {(this.RemoveNonSwappingRounds ? "\u001b[32mTrue\u001b[0m" : "\u001b[31mFalse\u001b[0m")} - Set to true if you want to skip non-swapping records from the visualization list. (\u001b[31mNot Recommended\u001b[0m)\nDisplay Rounds one-by-one (Visualization Only): {(this.OneByOne ? "\u001b[32mTrue\u001b[0m" : "\u001b[31mFalse\u001b[0m")} - Display each round after each key presses. This is good for practicing.\n\n");
+            Console.WriteLine($"--Preferences--\n\nImmediate Feedback: {(ImmediateFeedback ? "\u001b[32mTrue\u001b[0m" : "\u001b[31mFalse\u001b[0m")} - Shows if you were correct or not immediately, otherwise it will be shown at the end.\nRemove Non-Swapping Records (Visualization Only): {(RemoveNonSwappingRounds ? "\u001b[32mTrue\u001b[0m" : "\u001b[31mFalse\u001b[0m")} - Set to true if you want to skip non-swapping records from the visualization list. (\u001b[31mNot Recommended\u001b[0m)\nDisplay Rounds one-by-one (Visualization Only): {(OneByOne ? "\u001b[32mTrue\u001b[0m" : "\u001b[31mFalse\u001b[0m")} - Display each round after each key presses. This is good for practicing.\n\n");
             ConsoleKeyInfo key;
             int option = 1;
             bool isSelected = false;
@@ -35,12 +35,13 @@ namespace VSort
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
-                    case ConsoleKey.DownArrow: option = (option == 2 ? 1 : option + 1); break;
-                    case ConsoleKey.UpArrow: option = (option == 1 ? 2 : option - 1); break;
-                    case ConsoleKey.Enter: isSelected = true;
+                    case ConsoleKey.DownArrow: option = option == 2 ? 1 : option + 1; break;
+                    case ConsoleKey.UpArrow: option = option == 1 ? 2 : option - 1; break;
+                    case ConsoleKey.Enter:
+                        isSelected = true;
                         switch (option)
                         {
-                            case 1: Console.Clear(); this.setPreference(); this.viewPreferences(); break;
+                            case 1: Console.Clear(); setPreference(); viewPreferences(); break;
                             case 2: return;
                         }
                         break;
@@ -51,11 +52,11 @@ namespace VSort
         {
             Console.CursorVisible = true;
             Console.Write("--Setting Preference--\nInput \"True\" or \"False\" to set the values\n\nImmediate Feedback: ");
-            this.ImmediateFeedback = (Console.ReadLine().ToUpper() == "TRUE" ? true : false);
+            ImmediateFeedback = Console.ReadLine().ToUpper() == "TRUE" ? true : false;
             Console.Write("Remove Non-Swapping Records: ");
-            this.RemoveNonSwappingRounds = (Console.ReadLine().ToUpper() == "TRUE" ? true : false);
+            RemoveNonSwappingRounds = Console.ReadLine().ToUpper() == "TRUE" ? true : false;
             Console.Write("Display Rounds One-by-One: ");
-            this.OneByOne = (Console.ReadLine().ToUpper() == "TRUE" ? true : false);
+            OneByOne = Console.ReadLine().ToUpper() == "TRUE" ? true : false;
             Console.CursorVisible = false;
             Console.Clear();
             SavePreferences();
