@@ -97,7 +97,7 @@ namespace vsort
         static void practiceSortList(SortList sortList)
         {
             int score = 0;
-            Console.WriteLine("\n\nEnter the expected list for each round of sorting: ");
+            Console.WriteLine("\n\nEnter the expected list for each round of sorting (use space to separate data): ");
             Console.CursorVisible = true;
             for (int i = 0; i < sortList.Rounds.Count; i++)
             {
@@ -107,14 +107,16 @@ namespace vsort
                 {
                     if (expectedRound.SequenceEqual(sortList.Rounds[i]))
                     {
-                        Console.Write(string.Join(" ", sortList.Rounds[i]));
                         Console.WriteLine(" - Correct!");
                         score++;
                     }
                     else
-                        Console.WriteLine("Incorrect!");
+                    {
+                        Console.Write(string.Join(" ", sortList.Rounds[i]));
+                        Console.WriteLine(" - Incorrect!");
+                    }
                 }
-                if (expectedRound.SequenceEqual(sortList.Rounds[i]))
+                else if (expectedRound.SequenceEqual(sortList.Rounds[i]))
                     score++;
             }
             Console.WriteLine($"\n\nPractice ended.\nTotal Score: {score}/{sortList.Rounds.Count} ({(double)score / sortList.Rounds.Count * 100.0:F0}%)\n\n");
