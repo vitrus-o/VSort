@@ -38,3 +38,5 @@ dotnet build
 dotnet run
 ```
 2. Follow the on-screen instructions to navigate throught the menu
+
+Note: This application works best if you open a new console for it to run on. Running this on an existing and working terminal will change the UI
