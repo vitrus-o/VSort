@@ -39,7 +39,7 @@ namespace VSort.Classes
                 case SortingType.Selection_Sort: SelectionSort(array); break;
                 case SortingType.Bubble_Sort: BubbleSort(array); break;
                 case SortingType.Insertion_Sort: InsertionSort(array); break;
-                case SortingType.Merge_Sort: MergeSort(array, 0, array.Length - 1); break;
+                case SortingType.Merge_Sort: MergeSort(array, 0, array.Length - 1); CaptureRound(array); break;
                 case SortingType.Quick_Sort: QuickSort(array); break;
             }
         }
@@ -111,8 +111,8 @@ namespace VSort.Classes
                 int mid = (left + right) / 2;
                 MergeSort(array, left, mid);
                 MergeSort(array, mid + 1, right);
-                Merge(array, left, mid, right);
                 CaptureRound(array);
+                Merge(array, left, mid, right);
             }
         }
         private void Merge(int[] array, int left, int mid, int right)

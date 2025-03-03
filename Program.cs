@@ -46,7 +46,7 @@ namespace vsort
                 }
             } while (!exit);
         }
-        static void select(string action)
+        public static void select(string action)
         {
             SortList sl;
             SortingType st = SortingType.Selection_Sort;
@@ -94,7 +94,7 @@ namespace vsort
                 }
             } while (!exit);
         }
-        static void practiceSortList(SortList sortList)
+        public static void practiceSortList(SortList sortList)
         {
             int score = 0;
             Console.WriteLine("\n\nEnter the expected list for each round of sorting (use space to separate data): ");
@@ -140,7 +140,7 @@ namespace vsort
             Console.WriteLine($"\n\nPractice ended.\nTotal Score: {score}/{sortList.Rounds.Count} ({(double)score / sortList.Rounds.Count * 100.0:F0}%)\n\n");
             Console.CursorVisible = false;
         }
-        static SortList prompt(string action,SortingType sortingType)
+        public static SortList prompt(string action,SortingType sortingType)
         {
             Console.CursorVisible = true;
             int size = 0;
@@ -298,7 +298,7 @@ namespace vsort
             Console.CursorVisible = false;
             return new SortList(data, sortingType, ascending);
         }
-        static void printSortList(SortList sortList)
+        public static void printSortList(SortList sortList)
         {
             Console.WriteLine("\n");
             List<int> prev = null;
@@ -314,7 +314,7 @@ namespace vsort
             Console.WriteLine();
             Console.WriteLine("\nList has been sorted");
         }
-        static List<int> GenerateRandom(int size, int minValue = 1, int maxValue = 100)
+        public static List<int> GenerateRandom(int size, int minValue = 1, int maxValue = 100)
         {
             List<int> numbers = new List<int>();
             Random rand = new Random();
